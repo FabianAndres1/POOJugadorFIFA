@@ -103,6 +103,43 @@ public class Operation {
             System.out.println("Error al borrar: " + e.getMessage());
         }
     }
+
+    public static void updatePlayer(String name, int nuevoDorsal) {
+        java.util.ArrayList<String> lineas = new java.util.ArrayList<>();
+        boolean encontrado = false;
+
+        try {
+            // Leer el archivo y guardar en el ArrayList
+            BufferedReader buffer = new BufferedReader(new FileReader("players.csv"));
+            String linea;
+            while ((linea = buffer.readLine()) != null) {
+                String[] datos = linea.split(",");
+
+                // Buscar por nombre (índice 1) y modificar el dorsal (índice 2)
+                if (datos.length > 4 && datos[1].equalsIgnoreCase(name)) {
+                    datos[2] = String.valueOf(nuevoDorsal);
+                    linea = String.join(",", datos);
+                    encontrado = true;
+                    System.out.println("Jugador '" + name + "' actualizado con el dorsal " + nuevoDorsal + ".");
+                }
+                lineas.add(linea);
+            }
+            buffer.close();
+
+            // Sobrescribir el archivo si hubo actualización
+            if (encontrado) {
+                FileWriter escribir = new FileWriter("players.csv", false);
+                for (String l : lineas) {
+                    escribir.write(l + "\n");
+                }
+                escribir.close();
+            } else {
+                System.out.println("Jugador no encontrado para actualizar.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al actualizar: " + e.getMessage());
+        }
+    }
         //TODO adicionar ID para los registros de jugadores
 
 

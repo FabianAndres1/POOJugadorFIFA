@@ -31,6 +31,7 @@ public class Main {
             System.out.println("3. Mostrar jugadores");
             System.out.println("4. Cargar FC Barcelona 26-27");
             System.out.println("5. Borrar Jugador");
+            System.out.println("6. Actualizar Dorsal de Jugador");
             //TODO actualizar y borrar
             System.out.println("0. Salir destamonda");
             System.out.println("*********** CRUD FIFAS *********** ");
@@ -54,6 +55,16 @@ public class Main {
                     Scanner leerDelete = new Scanner(System.in);
                     System.out.println("Ingrese el nombre del jugador a borrar:");
                     operations.Operation.deletePlayer(leerDelete.nextLine());
+                    break;
+                case 6:
+                    Scanner leerUpdate = new Scanner(System.in);
+                    System.out.println("Ingrese el nombre del jugador a actualizar:");
+                    String nombreUpdate = leerUpdate.nextLine();
+
+                    System.out.println("Ingrese el nuevo número de dorsal:");
+                    int nuevoDorsal = leerUpdate.nextInt();
+
+                    operations.Operation.updatePlayer(nombreUpdate, nuevoDorsal);
                     break;
                 case 0:
                     System.out.println("Nos vemos");
