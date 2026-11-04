@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         //models.Jugador newPlayer = new models.Jugador("Pele", LocalDate.of(1940, 10,23));
-        //newPlayer.is_alive = false;
+        //newPlayer.is_alive  =  false; 12
         //newPlayer.dorsal=10;
         //TODO crear menu para usar y operar las acciones de los jugadores
 
