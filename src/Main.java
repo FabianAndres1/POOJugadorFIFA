@@ -1,5 +1,6 @@
 import models.Jugador;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -28,6 +29,7 @@ public class Main {
             System.out.println("1. Crear Jugador");
             System.out.println("2. Buscar Jugador");
             System.out.println("3. Mostrar jugadores");
+            System.out.println("4. Cargar FC Barcelona 26-27");
             //TODO actualizar y borrar
             System.out.println("0. Salir destamonda");
             System.out.println("*********** CRUD FIFAS *********** ");
@@ -43,6 +45,9 @@ public class Main {
                     break;
                 case 3:
                     showAllPlayers();
+                    break;
+                case 4:
+                    cargarBarcelona();
                     break;
                 case 0:
                     System.out.println("Nos vemos");
@@ -67,7 +72,13 @@ public class Main {
         int month = leer.nextInt();
         System.out.println("Ingrese día de nacimiento");
         int day = leer.nextInt();
-        savePlayer(new Jugador(name_player, LocalDate.of(year, month, day)));
+
+        // 1. Generamos un ID aleatorio de 2 dígitos
+        java.util.Random rnd = new java.util.Random();
+        String idRandom = String.valueOf(rnd.nextInt(90) + 10);
+
+        // 2. Lo pasamos como primer argumento al constructor (id, nombre, fecha)
+        savePlayer(new Jugador(idRandom, name_player, LocalDate.of(year, month, day)));
     }
 
     public static void findPlayer() {
@@ -82,5 +93,38 @@ public class Main {
 
     }
 
+    public static void cargarBarcelona() {
+        System.out.println("Cargando titulares del FC Barcelona 26-27...");
+
+        String[][] datosBarca = {
+                {"Joan Garcia", "2001", "5", "4"},
+                {"Xavi Espart", "2007", "1", "1"},
+                {"Pau Cubarsi", "2007", "1", "22"},
+                {"Gerard Martin", "2002", "2", "26"},
+                {"Joao Cancelo", "1994", "5", "27"},
+                {"Rodri", "1996", "6", "22"},
+                {"Pedri", "2002", "11", "25"},
+                {"Fermin Lopez", "2003", "5", "11"},
+                {"Lamine Yamal", "2007", "7", "13"},
+                {"Anthony Gordon", "2001", "2", "24"},
+                {"Raphinha (C)", "1996", "12", "14"}
+        };
+
+        java.util.Random rnd = new java.util.Random();
+
+        for (int i = 0; i < datosBarca.length; i++) {
+            String idRandom = String.valueOf(rnd.nextInt(90) + 10);
+
+            int anio = Integer.parseInt(datosBarca[i][1]);
+            int mes = Integer.parseInt(datosBarca[i][2]);
+            int dia = Integer.parseInt(datosBarca[i][3]);
+
+            Jugador j = new Jugador(idRandom, datosBarca[i][0], LocalDate.of(anio, mes, dia));
+            j.dorsal = i + 1;
+
+            operations.Operation.savePlayer(j);
+        }
+        System.out.println("¡Plantilla del Barça guardada en CSV!");
+    }
 
 }

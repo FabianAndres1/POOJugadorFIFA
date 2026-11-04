@@ -45,37 +45,27 @@ public class Operation {
             System.out.println(e.getMessage());
         }
     }
-    public static void readOnePlayer(String name)
-    {
+    public static void readOnePlayer(String name) {
         try {
             FileReader lector = new FileReader("players.csv");
             BufferedReader buffer = new BufferedReader(lector);
             String playerReader;
 
-            while ((playerReader = buffer.readLine())!=null)
-            {
+            while ((playerReader = buffer.readLine()) != null) {
+                String[] data_readed = playerReader.split(",");
 
-               String [] data_readed = playerReader.split(",");
-               Jugador temp_player = new Jugador();
-               temp_player.name= data_readed[0];
-               temp_player.dorsal = Integer.parseInt(data_readed[1]);
-               temp_player.is_alive = Boolean.parseBoolean(data_readed[3]);
-
-               if (temp_player.name.equals(name))
-               {
-
-                   System.out.println(playerReader);
-                   //playerReader = null;
-               }
-
+                // data_readed[0] es ID, data_readed[1] es Nombre
+                if (data_readed.length > 1 && data_readed[1].equalsIgnoreCase(name)) {
+                    System.out.println(playerReader);
+                }
             }
 
-
             buffer.close();
-            System.out.println("All players have been read");
+            System.out.println("Búsqueda finalizada.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
 
         //TODO adicionar ID para los registros de jugadores
 
@@ -98,4 +88,4 @@ public class Operation {
 
 
 
-}
+

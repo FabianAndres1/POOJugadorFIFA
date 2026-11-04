@@ -13,6 +13,13 @@ public class Persona {
     public void setCountry(String newCountry){
         this.country=newCountry;
     }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {
