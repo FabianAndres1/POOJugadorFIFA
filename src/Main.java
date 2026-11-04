@@ -30,6 +30,7 @@ public class Main {
             System.out.println("2. Buscar Jugador");
             System.out.println("3. Mostrar jugadores");
             System.out.println("4. Cargar FC Barcelona 26-27");
+            System.out.println("5. Borrar Jugador");
             //TODO actualizar y borrar
             System.out.println("0. Salir destamonda");
             System.out.println("*********** CRUD FIFAS *********** ");
@@ -48,6 +49,11 @@ public class Main {
                     break;
                 case 4:
                     cargarBarcelona();
+                    break;
+                case 5:
+                    Scanner leerDelete = new Scanner(System.in);
+                    System.out.println("Ingrese el nombre del jugador a borrar:");
+                    operations.Operation.deletePlayer(leerDelete.nextLine());
                     break;
                 case 0:
                     System.out.println("Nos vemos");

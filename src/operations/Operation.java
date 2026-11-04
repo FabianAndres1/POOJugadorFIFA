@@ -67,6 +67,42 @@ public class Operation {
         }
     }
 
+    public static void deletePlayer(String name) {
+        java.util.ArrayList<String> lineas = new java.util.ArrayList<>();
+        boolean encontrado = false;
+
+        try {
+            // Leer y guardar todo en el ArrayList
+            BufferedReader buffer = new BufferedReader(new FileReader("players.csv"));
+            String linea;
+            while ((linea = buffer.readLine()) != null) {
+                String[] datos = linea.split(",");
+
+                // Buscar por nombre (índice 1) y modificar estado is_alive (índice 4)
+                if (datos.length > 4 && datos[1].equalsIgnoreCase(name)) {
+                    datos[4] = "false";
+                    linea = String.join(",", datos);
+                    encontrado = true;
+                    System.out.println("Jugador '" + name + "' eliminado (estado inactivo).");
+                }
+                lineas.add(linea);
+            }
+            buffer.close();
+
+            // Sobrescribir el archivo si se encontró el jugador
+            if (encontrado) {
+                FileWriter escribir = new FileWriter("players.csv", false); // "false" borra y reescribe
+                for (String l : lineas) {
+                    escribir.write(l + "\n");
+                }
+                escribir.close();
+            } else {
+                System.out.println("Jugador no encontrado.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al borrar: " + e.getMessage());
+        }
+    }
         //TODO adicionar ID para los registros de jugadores
 
 
