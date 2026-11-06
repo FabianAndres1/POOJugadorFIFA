@@ -140,6 +140,17 @@ public class Operation {
             System.out.println("Error al actualizar: " + e.getMessage());
         }
     }
+
+    public static void saveTeam(models.Equipo equipoToSave) {
+        try {
+            FileWriter escribir = new FileWriter("teams.csv", true);
+            escribir.write(equipoToSave.equipoToCSV() + "\n");
+            escribir.close();
+            System.out.println("Equipo '" + equipoToSave.nombre + "' guardado exitosamente en teams.csv");
+        } catch (Exception e) {
+            System.out.println("Error al guardar equipo: " + e.getMessage());
+        }
+    }
         //TODO adicionar ID para los registros de jugadores
 
 

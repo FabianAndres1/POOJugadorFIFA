@@ -129,8 +129,14 @@ public class Main {
 
         java.util.Random rnd = new java.util.Random();
 
+        // 1. Creamos el arreglo vacío para guardar los IDs de los 11 jugadores
+        String[] idsJugadores = new String[datosBarca.length];
+
         for (int i = 0; i < datosBarca.length; i++) {
             String idRandom = String.valueOf(rnd.nextInt(90) + 10);
+
+            // 2. Guardamos el ID generado en nuestro arreglo
+            idsJugadores[i] = idRandom;
 
             int anio = Integer.parseInt(datosBarca[i][1]);
             int mes = Integer.parseInt(datosBarca[i][2]);
@@ -141,7 +147,18 @@ public class Main {
 
             operations.Operation.savePlayer(j);
         }
-        System.out.println("¡Plantilla del Barça guardada en CSV!");
+        System.out.println("¡Plantilla del Barça guardada en players.csv!");
+
+        // 3. Crear al Técnico
+        models.Tecnico dt = new models.Tecnico();
+        dt.setId(String.valueOf(rnd.nextInt(90) + 10)); // ID aleatorio
+        dt.name = "Hansi Flick";
+        dt.club = "FC Barcelona";
+
+        // 4. Crear el Equipo y guardarlo
+        // Le pasamos un ID fijo al equipo (ej. "1"), el nombre, el técnico y el arreglo de IDs
+        models.Equipo equipo = new models.Equipo("1", "FC Barcelona", dt, idsJugadores);
+        operations.Operation.saveTeam(equipo);
     }
 
 }
