@@ -28,6 +28,8 @@ public class Main {
             System.out.println("7. Vaciar todos los datos (CSV)");
             System.out.println("8. Crear Técnico");
             System.out.println("9. Asignar Equipo a Jugador");
+            System.out.println("10. Crear Equipo (con Técnico y Jugadores)");
+            System.out.println("11. Cargar Real Madrid 26-27");
             System.out.println("0. Salir destamonda");
             System.out.println("*********** CRUD FIFAS *********** ");
 
@@ -82,6 +84,35 @@ public class Main {
                     System.out.println("Nombre del equipo a asignar:");
                     String eqAsig = leerAsig.nextLine();
                     operations.Operation.asignarEquipoAJugador(jugAsig, eqAsig);
+                    break;
+                case 10:
+                    Scanner leerEq = new Scanner(System.in);
+                    String idEq = String.valueOf(new java.util.Random().nextInt(90) + 10);
+                    System.out.println("Nombre del nuevo Equipo:");
+                    String nomEq = leerEq.nextLine();
+
+                    models.Tecnico dtEq = new models.Tecnico();
+                    dtEq.setId(String.valueOf(new java.util.Random().nextInt(90) + 10));
+                    System.out.println("Nombre del Técnico para este equipo:");
+                    dtEq.name = leerEq.nextLine();
+                    dtEq.club = nomEq;
+                    operations.Operation.saveTecnico(dtEq);
+
+                    System.out.println("¿Cuántos jugadores desea vincular por ID?");
+                    int cant = leerEq.nextInt();
+                    leerEq.nextLine(); // Limpiar buffer
+                    String[] ids = new String[cant];
+                    for (int i = 0; i < cant; i++) {
+                        System.out.println("Ingrese el ID del jugador " + (i + 1) + ":");
+                        ids[i] = leerEq.nextLine();
+                    }
+
+                    models.Equipo eqNuevo = new models.Equipo(idEq, nomEq, dtEq, ids);
+                    operations.Operation.saveTeam(eqNuevo);
+                    break;
+
+                case 11:
+                    cargarRealMadrid();
                     break;
                 case 0:
                     System.out.println("Nos vemos");
@@ -161,6 +192,7 @@ public class Main {
 
             Jugador j = new Jugador(idRandom, datosBarca[i][0], LocalDate.of(anio, mes, dia));
             j.dorsal = i + 1;
+            j.equipo = "FC Barcelona";
 
             operations.Operation.savePlayer(j);
         }
@@ -171,11 +203,59 @@ public class Main {
         dt.setId(String.valueOf(rnd.nextInt(90) + 10)); // ID aleatorio
         dt.name = "Hansi Flick";
         dt.club = "FC Barcelona";
+        operations.Operation.saveTecnico(dt);
 
         // 4. Crear el Equipo y guardarlo
         // Le pasamos un ID fijo al equipo (ej. "1"), el nombre, el técnico y el arreglo de IDs
         models.Equipo equipo = new models.Equipo("1", "FC Barcelona", dt, idsJugadores);
         operations.Operation.saveTeam(equipo);
     }
+    public static void cargarRealMadrid() {
+        System.out.println("Cargando plantilla titular del Real Madrid 26-27...");
 
+        // Formato: {Nombre, Año, Mes, Día, Dorsal}
+        String[][] datosMadrid = {
+                {"Thibaut Courtois", "1992", "5", "11", "1"},
+                {"Trent Alexander-Arnold", "1998", "10", "7", "12"},
+                {"Eder Militao", "1998", "1", "18", "3"},
+                {"Dean Huijsen", "2005", "4", "14", "4"},
+                {"Alvaro Carreras", "2003", "3", "23", "18"},
+                {"Federico Valverde", "1998", "7", "22", "8"},
+                {"Jude Bellingham", "2003", "6", "29", "5"},
+                {"Arda Guler", "2005", "2", "25", "15"},
+                {"Vinicius Jr", "2000", "7", "12", "7"},
+                {"Kylian Mbappe", "1998", "12", "20", "10"},
+                {"Yan Diomande", "2006", "11", "14", "25"}
+        };
+
+        java.util.Random rnd = new java.util.Random();
+        String[] idsJugadores = new String[datosMadrid.length];
+
+        for (int i = 0; i < datosMadrid.length; i++) {
+            String idRandom = String.valueOf(rnd.nextInt(90) + 10);
+            idsJugadores[i] = idRandom;
+
+            int anio = Integer.parseInt(datosMadrid[i][1]);
+            int mes = Integer.parseInt(datosMadrid[i][2]);
+            int dia = Integer.parseInt(datosMadrid[i][3]);
+            int dorsalReal = Integer.parseInt(datosMadrid[i][4]);
+
+            models.Jugador j = new models.Jugador(idRandom, datosMadrid[i][0], java.time.LocalDate.of(anio, mes, dia));
+            j.dorsal = dorsalReal;
+            j.equipo = "Real Madrid";
+
+            operations.Operation.savePlayer(j);
+        }
+
+        // Técnico del Real Madrid 26-27
+        models.Tecnico dt = new models.Tecnico();
+        dt.setId(String.valueOf(rnd.nextInt(90) + 10));
+        dt.name = "Jose Mourinho";
+        dt.club = "Real Madrid";
+        operations.Operation.saveTecnico(dt);
+
+        // Guardar Equipo en teams.csv
+        models.Equipo equipo = new models.Equipo("2", "Real Madrid", dt, idsJugadores);
+        operations.Operation.saveTeam(equipo);
+    }
 }
