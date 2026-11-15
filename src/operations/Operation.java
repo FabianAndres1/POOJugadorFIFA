@@ -75,26 +75,25 @@ public class Operation {
         boolean encontrado = false;
 
         try {
-            // Leer y guardar todo en el ArrayList
-            BufferedReader buffer = new BufferedReader(new FileReader("players.csv"));
+            java.io.BufferedReader buffer = new java.io.BufferedReader(new java.io.FileReader("players.csv"));
             String linea;
             while ((linea = buffer.readLine()) != null) {
                 String[] datos = linea.split(",");
-
-                // Buscar por nombre (índice 1) y modificar estado is_alive (índice 4)
-                if (datos.length > 4 && datos[1].equalsIgnoreCase(name)) {
-                    datos[4] = "false";
-                    linea = String.join(",", datos);
-                    encontrado = true;
-                    System.out.println("Jugador '" + name + "' eliminado (estado inactivo).");
+                if (datos.length > 5) {
+                    String nombreLimpio = datos[1].replace("nombre:", "").trim();
+                    if (nombreLimpio.equalsIgnoreCase(name)) {
+                        datos[5] = " estado: false";
+                        linea = String.join(",", datos);
+                        encontrado = true;
+                        System.out.println("Jugador " + nombreLimpio + " marcado como inactivo (estado: false).");
+                    }
                 }
                 lineas.add(linea);
             }
             buffer.close();
 
-            // Sobrescribir el archivo si se encontró el jugador
             if (encontrado) {
-                FileWriter escribir = new FileWriter("players.csv", false); // "false" borra y reescribe
+                java.io.FileWriter escribir = new java.io.FileWriter("players.csv", false);
                 for (String l : lineas) {
                     escribir.write(l + "\n");
                 }
@@ -103,47 +102,45 @@ public class Operation {
                 System.out.println("Jugador no encontrado.");
             }
         } catch (Exception e) {
-            System.out.println("Error al borrar: " + e.getMessage());
+            System.out.println("Error al eliminar jugador: " + e.getMessage());
         }
     }
 
-    public static void updatePlayer(String name, int nuevoDorsal) {
+    public static void updatePlayer(String name, int newDorsal) {
         java.util.ArrayList<String> lineas = new java.util.ArrayList<>();
         boolean encontrado = false;
 
         try {
-            // Leer el archivo y guardar en el ArrayList
-            BufferedReader buffer = new BufferedReader(new FileReader("players.csv"));
+            java.io.BufferedReader buffer = new java.io.BufferedReader(new java.io.FileReader("players.csv"));
             String linea;
             while ((linea = buffer.readLine()) != null) {
                 String[] datos = linea.split(",");
-
-                // Buscar por nombre (índice 1) y modificar el dorsal (índice 2)
-                if (datos.length > 4 && datos[1].equalsIgnoreCase(name)) {
-                    datos[2] = String.valueOf(nuevoDorsal);
-                    linea = String.join(",", datos);
-                    encontrado = true;
-                    System.out.println("Jugador '" + name + "' actualizado con el dorsal " + nuevoDorsal + ".");
+                if (datos.length > 5) {
+                    String nombreLimpio = datos[1].replace("nombre:", "").trim();
+                    if (nombreLimpio.equalsIgnoreCase(name)) {
+                        datos[2] = " dorsal: " + newDorsal;
+                        linea = String.join(",", datos);
+                        encontrado = true;
+                        System.out.println("Dorsal de " + nombreLimpio + " actualizado a " + newDorsal);
+                    }
                 }
                 lineas.add(linea);
             }
             buffer.close();
 
-            // Sobrescribir el archivo si hubo actualización
             if (encontrado) {
-                FileWriter escribir = new FileWriter("players.csv", false);
+                java.io.FileWriter escribir = new java.io.FileWriter("players.csv", false);
                 for (String l : lineas) {
                     escribir.write(l + "\n");
                 }
                 escribir.close();
             } else {
-                System.out.println("Jugador no encontrado para actualizar.");
+                System.out.println("Jugador no encontrado.");
             }
         } catch (Exception e) {
-            System.out.println("Error al actualizar: " + e.getMessage());
+            System.out.println("Error al actualizar dorsal: " + e.getMessage());
         }
     }
-
     public static void saveTeam(models.Equipo equipoToSave) {
         try {
             FileWriter escribir = new FileWriter("teams.csv", true);
