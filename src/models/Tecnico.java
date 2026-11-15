@@ -11,7 +11,7 @@ public class Tecnico extends Persona{
 
     }
     public String tecnicoToCSV() {
-        return "id: " + this.id + ", nombre: " + this.name + ", club: " + this.club;
+        return "id: " + getId() + ", nombre: " + this.name + ", club: " + this.club;
     }
 }
 

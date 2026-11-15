@@ -6,7 +6,6 @@ import java.time.Period;
 public class Jugador extends Persona {
     public int dorsal;
     public String equipo = "Sin equipo";
-    public Posicion posicion;
     private LocalDate nacimiento;
 
     public void setNacimiento(LocalDate nacimiento) {
@@ -38,10 +37,10 @@ public class Jugador extends Persona {
     }
 
     public String playerToCSV() {
-        return "id: " + this.id +
+        return "id: " + getId() +
                 ", nombre: " + this.name +
                 ", dorsal: " + this.dorsal +
-                ", edad: " + this.age +
+                ", edad: " + getEdad() +
                 ", equipo: " + this.equipo +
                 ", estado: " + this.is_alive;
     }
