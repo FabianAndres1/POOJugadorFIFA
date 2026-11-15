@@ -16,10 +16,8 @@ public class Equipo {
     }
 
     public String equipoToCSV() {
-        // Formatea el arreglo para que se guarde como "[12, 45, 88]" asegurado con comillas
-        String idsArreglo = "\"" + Arrays.toString(jugadoresIds) + "\"";
+        String idsArreglo = java.util.Arrays.toString(jugadoresIds);
         String nombreEntrenador = (entrenador != null) ? entrenador.name : "Sin Entrenador";
-
-        return this.id + "," + this.nombre + "," + nombreEntrenador + "," + idsArreglo;
+        return "id: " + this.id + ", nombre: " + this.nombre + ", tecnico: " + nombreEntrenador + ", jugadores: " + idsArreglo;
     }
 }
