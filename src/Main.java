@@ -25,6 +25,7 @@ public class Main {
             System.out.println("4. Cargar FC Barcelona 26-27");
             System.out.println("5. Borrar Jugador");
             System.out.println("6. Actualizar Dorsal de Jugador");
+            System.out.println("7. Vaciar todos los datos (CSV)");
             System.out.println("0. Salir destamonda");
             System.out.println("*********** CRUD FIFAS *********** ");
 
@@ -57,6 +58,9 @@ public class Main {
                     int nuevoDorsal = leerUpdate.nextInt();
 
                     operations.Operation.updatePlayer(nombreUpdate, nuevoDorsal);
+                    break;
+                case 7:
+                    operations.Operation.limpiarTodosLosCSV();
                     break;
                 case 0:
                     System.out.println("Nos vemos");

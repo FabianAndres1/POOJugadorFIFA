@@ -54,9 +54,12 @@ public class Operation {
             while ((playerReader = buffer.readLine()) != null) {
                 String[] data_readed = playerReader.split(",");
 
-                // data_readed[0] es ID, data_readed[1] es Nombre
-                if (data_readed.length > 1 && data_readed[1].equalsIgnoreCase(name)) {
-                    System.out.println(playerReader);
+                String[] datos = playerReader.split(",");
+                if (datos.length > 5) {
+                    String nombreLimpio = datos[1].replace("nombre:", "").trim();
+                    if (nombreLimpio.equalsIgnoreCase(name)) {
+                        System.out.println(playerReader);
+                    }
                 }
             }
 
@@ -153,7 +156,19 @@ public class Operation {
     }
         //TODO adicionar ID para los registros de jugadores
 
-
+    public static void limpiarTodosLosCSV() {
+        String[] archivos = {"players.csv", "teams.csv", "coaches.csv"};
+        for (String archivo : archivos) {
+            try {
+                java.io.FileWriter fw = new java.io.FileWriter(archivo, false);
+                fw.write("");
+                fw.close();
+            } catch (Exception e) {
+                System.out.println("Error limpiando " + archivo + ": " + e.getMessage());
+            }
+        }
+        System.out.println("Todos los archivos CSV (jugadores, equipos y técnicos) han sido vaciados.");
+    }
     }
 
 
