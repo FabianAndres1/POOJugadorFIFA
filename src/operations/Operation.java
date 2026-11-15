@@ -178,10 +178,13 @@ public class Operation {
     }
 
     public static void asignarEquipoAJugador(String nombreJugador, String nombreEquipo) {
-        java.util.ArrayList<String> lineas = new java.util.ArrayList<>();
+        java.util.ArrayList<String> lineasPlayers = new java.util.ArrayList<>();
+        String idJugador = "";
+        String equipoAnterior = "";
         boolean encontrado = false;
 
         try {
+            // 1. Actualizar equipo en players.csv y capturar ID y equipo anterior
             java.io.BufferedReader buffer = new java.io.BufferedReader(new java.io.FileReader("players.csv"));
             String linea;
             while ((linea = buffer.readLine()) != null) {
@@ -189,25 +192,74 @@ public class Operation {
                 if (datos.length > 5) {
                     String nombreLimpio = datos[1].replace("nombre:", "").trim();
                     if (nombreLimpio.equalsIgnoreCase(nombreJugador)) {
+                        idJugador = datos[0].replace("id:", "").trim();
+                        equipoAnterior = datos[4].replace("equipo:", "").trim();
                         datos[4] = " equipo: " + nombreEquipo;
                         linea = String.join(",", datos);
                         encontrado = true;
-                        System.out.println("Equipo '" + nombreEquipo + "' asignado a " + nombreJugador);
                     }
                 }
-                lineas.add(linea);
+                lineasPlayers.add(linea);
             }
             buffer.close();
 
-            if (encontrado) {
-                java.io.FileWriter escribir = new java.io.FileWriter("players.csv", false);
-                for (String l : lineas) {
-                    escribir.write(l + "\n");
-                }
-                escribir.close();
-            } else {
+            if (!encontrado) {
                 System.out.println("Jugador no encontrado.");
+                return;
             }
+
+            java.io.FileWriter escribirPlayers = new java.io.FileWriter("players.csv", false);
+            for (String l : lineasPlayers) {
+                escribirPlayers.write(l + "\n");
+            }
+            escribirPlayers.close();
+
+            // 2. Sincronizar arreglo de IDs en teams.csv (quitar del anterior y agregar al nuevo)
+            java.io.File archivoTeams = new java.io.File("teams.csv");
+            if (archivoTeams.exists()) {
+                java.util.ArrayList<String> lineasTeams = new java.util.ArrayList<>();
+                java.io.BufferedReader bufferTeams = new java.io.BufferedReader(new java.io.FileReader(archivoTeams));
+                String lineaTeam;
+
+                while ((lineaTeam = bufferTeams.readLine()) != null) {
+                    int idxJugadores = lineaTeam.indexOf(", jugadores: ");
+                    if (idxJugadores != -1) {
+                        String prefijo = lineaTeam.substring(0, idxJugadores);
+                        String listaStr = lineaTeam.substring(idxJugadores + 13).replace("[", "").replace("]", "").trim();
+
+                        java.util.ArrayList<String> idsList = new java.util.ArrayList<>();
+                        if (!listaStr.isEmpty()) {
+                            for (String item : listaStr.split(",")) {
+                                idsList.add(item.trim());
+                            }
+                        }
+
+                        String[] partesPrefijo = prefijo.split(",");
+                        String nombreClub = partesPrefijo[1].replace("nombre:", "").trim();
+
+                        // Eliminar ID si pertenecía al equipo anterior
+                        if (nombreClub.equalsIgnoreCase(equipoAnterior)) {
+                            idsList.remove(idJugador);
+                        }
+                        // Agregar ID al equipo nuevo (sin duplicar)
+                        if (nombreClub.equalsIgnoreCase(nombreEquipo) && !idsList.contains(idJugador)) {
+                            idsList.add(idJugador);
+                        }
+
+                        lineaTeam = prefijo + ", jugadores: " + idsList.toString();
+                    }
+                    lineasTeams.add(lineaTeam);
+                }
+                bufferTeams.close();
+
+                java.io.FileWriter escribirTeams = new java.io.FileWriter("teams.csv", false);
+                for (String lt : lineasTeams) {
+                    escribirTeams.write(lt + "\n");
+                }
+                escribirTeams.close();
+            }
+
+            System.out.println("Asignación exitosa: " + nombreJugador + " (ID: " + idJugador + ") ahora pertenece a '" + nombreEquipo + "'.");
         } catch (Exception e) {
             System.out.println("Error al asignar equipo: " + e.getMessage());
         }
