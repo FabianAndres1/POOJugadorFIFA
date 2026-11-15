@@ -169,6 +169,52 @@ public class Operation {
         }
         System.out.println("Todos los archivos CSV (jugadores, equipos y técnicos) han sido vaciados.");
     }
+    public static void saveTecnico(models.Tecnico tecnicoToSave) {
+        try {
+            java.io.FileWriter escribir = new java.io.FileWriter("coaches.csv", true);
+            escribir.write(tecnicoToSave.tecnicoToCSV() + "\n");
+            escribir.close();
+            System.out.println("Técnico '" + tecnicoToSave.name + "' guardado en coaches.csv");
+        } catch (Exception e) {
+            System.out.println("Error al guardar técnico: " + e.getMessage());
+        }
+    }
+
+    public static void asignarEquipoAJugador(String nombreJugador, String nombreEquipo) {
+        java.util.ArrayList<String> lineas = new java.util.ArrayList<>();
+        boolean encontrado = false;
+
+        try {
+            java.io.BufferedReader buffer = new java.io.BufferedReader(new java.io.FileReader("players.csv"));
+            String linea;
+            while ((linea = buffer.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (datos.length > 5) {
+                    String nombreLimpio = datos[1].replace("nombre:", "").trim();
+                    if (nombreLimpio.equalsIgnoreCase(nombreJugador)) {
+                        datos[4] = " equipo: " + nombreEquipo;
+                        linea = String.join(",", datos);
+                        encontrado = true;
+                        System.out.println("Equipo '" + nombreEquipo + "' asignado a " + nombreJugador);
+                    }
+                }
+                lineas.add(linea);
+            }
+            buffer.close();
+
+            if (encontrado) {
+                java.io.FileWriter escribir = new java.io.FileWriter("players.csv", false);
+                for (String l : lineas) {
+                    escribir.write(l + "\n");
+                }
+                escribir.close();
+            } else {
+                System.out.println("Jugador no encontrado.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al asignar equipo: " + e.getMessage());
+        }
+    }
     }
 
 

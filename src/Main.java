@@ -26,6 +26,8 @@ public class Main {
             System.out.println("5. Borrar Jugador");
             System.out.println("6. Actualizar Dorsal de Jugador");
             System.out.println("7. Vaciar todos los datos (CSV)");
+            System.out.println("8. Crear Técnico");
+            System.out.println("9. Asignar Equipo a Jugador");
             System.out.println("0. Salir destamonda");
             System.out.println("*********** CRUD FIFAS *********** ");
 
@@ -61,6 +63,25 @@ public class Main {
                     break;
                 case 7:
                     operations.Operation.limpiarTodosLosCSV();
+                    break;
+                case 8:
+                    Scanner leerTec = new Scanner(System.in);
+                    models.Tecnico nuevoTec = new models.Tecnico();
+                    nuevoTec.setId(String.valueOf(new java.util.Random().nextInt(90) + 10));
+                    System.out.println("Nombre del Técnico:");
+                    nuevoTec.name = leerTec.nextLine();
+                    System.out.println("Club que dirige (o 'Sin equipo'):");
+                    nuevoTec.club = leerTec.nextLine();
+                    operations.Operation.saveTecnico(nuevoTec);
+                    break;
+
+                case 9:
+                    Scanner leerAsig = new Scanner(System.in);
+                    System.out.println("Nombre del jugador:");
+                    String jugAsig = leerAsig.nextLine();
+                    System.out.println("Nombre del equipo a asignar:");
+                    String eqAsig = leerAsig.nextLine();
+                    operations.Operation.asignarEquipoAJugador(jugAsig, eqAsig);
                     break;
                 case 0:
                     System.out.println("Nos vemos");
