@@ -22,14 +22,14 @@ public class Main {
             System.out.println("1. Crear Jugador");
             System.out.println("2. Buscar Jugador");
             System.out.println("3. Mostrar jugadores");
-            System.out.println("4. Cargar FC Barcelona 26-27");
+            System.out.println("4. Asignar Equipo a Jugador");
             System.out.println("5. Borrar Jugador");
             System.out.println("6. Actualizar Dorsal de Jugador");
-            System.out.println("7. Vaciar todos los datos (CSV)");
+            System.out.println("7.  Cargar Real Madrid 26-27");
             System.out.println("8. Crear Técnico");
-            System.out.println("9. Asignar Equipo a Jugador");
+            System.out.println("9. Cargar FC Barcelona 26-27");
             System.out.println("10. Crear Equipo (con Técnico y Jugadores)");
-            System.out.println("11. Cargar Real Madrid 26-27");
+            System.out.println("11. Vaciar todos los datos (CSV");
             System.out.println("0. Salir destamonda");
             System.out.println("*********** CRUD FIFAS *********** ");
 
@@ -46,7 +46,12 @@ public class Main {
                     showAllPlayers();
                     break;
                 case 4:
-                    cargarBarcelona();
+                    Scanner leerAsig = new Scanner(System.in);
+                    System.out.println("Nombre del jugador:");
+                    String jugAsig = leerAsig.nextLine();
+                    System.out.println("Nombre del equipo a asignar:");
+                    String eqAsig = leerAsig.nextLine();
+                    operations.Operation.asignarEquipoAJugador(jugAsig, eqAsig);
                     break;
                 case 5:
                     Scanner leerDelete = new Scanner(System.in);
@@ -64,8 +69,9 @@ public class Main {
                     operations.Operation.updatePlayer(nombreUpdate, nuevoDorsal);
                     break;
                 case 7:
-                    operations.Operation.limpiarTodosLosCSV();
+                    cargarRealMadrid();
                     break;
+
                 case 8:
                     Scanner leerTec = new Scanner(System.in);
                     models.Tecnico nuevoTec = new models.Tecnico();
@@ -78,12 +84,7 @@ public class Main {
                     break;
 
                 case 9:
-                    Scanner leerAsig = new Scanner(System.in);
-                    System.out.println("Nombre del jugador:");
-                    String jugAsig = leerAsig.nextLine();
-                    System.out.println("Nombre del equipo a asignar:");
-                    String eqAsig = leerAsig.nextLine();
-                    operations.Operation.asignarEquipoAJugador(jugAsig, eqAsig);
+                    cargarBarcelona();
                     break;
                 case 10:
                     Scanner leerEq = new Scanner(System.in);
@@ -112,7 +113,7 @@ public class Main {
                     break;
 
                 case 11:
-                    cargarRealMadrid();
+                    operations.Operation.limpiarTodosLosCSV();
                     break;
                 case 0:
                     System.out.println("Nos vemos");
